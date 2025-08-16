@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "toolhub-cli"
+version = "0.1.0"
+description = "A collection of useful command-line tools."
+authors = ["13angs"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["rich"], version = "^0.16.0"}
+ffmpeg-python = "^0.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
