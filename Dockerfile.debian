@@ -1,3 +1,6 @@
+# Dockerfile for Debian-based distributions (e.g., python:3.11-slim)
+# Provides better compatibility for complex packages.
+
 # --- STAGE 1: Build Stage ---
 FROM python:3.11-slim AS builder
 
@@ -10,7 +13,6 @@ ENV POETRY_VERSION=1.8.2
 WORKDIR /app
 
 # Install system dependencies
-# ADDED: Audio libraries needed for the 'recorder' tool (sounddevice package)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ffmpeg \
@@ -24,16 +26,16 @@ RUN apt-get update && \
 # Install Poetry
 RUN pip install "poetry==${POETRY_VERSION}"
 
-# Copy only the dependency definition files
+# Copy dependency definition files
 COPY pyproject.toml poetry.lock* ./
 
-# Disable virtual environment creation by Poetry.
+# Disable virtual environment creation by Poetry
 RUN poetry config virtualenvs.create false
 
 # Install project dependencies
 RUN poetry install --no-dev --no-interaction --no-ansi
 
-# Copy the rest of the application source code
+# Copy the application source code
 COPY . .
 
 
@@ -47,8 +49,7 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory
 WORKDIR /app
 
-# Install only the necessary system dependencies
-# ADDED: Audio runtime libraries needed for the 'recorder' tool
+# Install only the necessary runtime system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ffmpeg \
@@ -56,18 +57,18 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy the installed Python packages from the builder stage
+# Copy installed Python packages from the builder stage
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
-# Copy the application code from the builder stage
+# Copy application code from the builder stage
 COPY --from=builder /app /app
 
-# Create a non-root user for security reasons
+# Create a non-root user for security
 RUN useradd --create-home --shell /bin/bash appuser
 USER appuser
 
-# Define the entrypoint for the container.
+# Define the entrypoint
 ENTRYPOINT ["python", "toolhub.py"]
 
-# Set the default command to run if no command is specified.
+# Set the default command
 CMD ["--help"]

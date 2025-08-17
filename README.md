@@ -18,6 +18,9 @@ A collection of useful command-line tools, built with Python and Typer.
 │       ├── cli.py
 │       ├── main.py
 │       └── README.md
+├── .dockerignore
+├── Dockerfile.alpine
+├── Dockerfile.debian
 ├── pyproject.toml
 ├── toolhub.py
 └── README.md
@@ -59,6 +62,50 @@ All commands follow this basic structure. To ensure you are using the correct Py
 ```bash
 poetry run python toolhub.py <TOOL_NAME> <COMMAND> [ARGUMENTS] [OPTIONS]
 ```
+
+---
+
+## 🐳 Docker Usage
+
+This project can be built into a Docker image for easy and consistent execution across different environments. We provide Dockerfiles for two popular Linux distributions.
+
+### Choosing an Image
+-   **Debian (`Dockerfile.debian`):** Recommended for general use. It offers great compatibility with a wide range of software.
+-   **Alpine (`Dockerfile.alpine`):** Recommended for production or when the smallest possible image size is a priority.
+
+### 1. Building the Image
+
+Open your terminal at the root of the project and use one of the following commands. The `-f` flag specifies which Dockerfile to use, and the `-t` flag tags the image with a memorable name.
+
+**To build the Debian-based image:**
+```bash
+docker build -f Dockerfile.debian -t toolhub:debian .
+```
+
+**To build the Alpine-based image:**
+```bash
+docker build -f Dockerfile.alpine -t toolhub:alpine .
+```
+
+### 2. Running Commands
+
+Once the image is built, you can run any tool by passing commands to `docker run`. The key is to mount your current working directory into the container's `/app/data` directory to allow file access.
+
+**General Syntax:**
+```bash
+# For Debian
+docker run --rm -v "$(pwd):/app/data" toolhub:debian <TOOL_NAME> [COMMANDS_AND_OPTIONS]
+
+# For Alpine
+docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]```
+
+**Example: Extracting audio using the `debian` image**
+
+Assume you have a file named `my_video.mp4` in your current directory.
+```bash
+docker run --rm -v "$(pwd):/app/data" toolhub:debian vid2audio extract /app/data/my_video.mp4 /app/data/audio.mp3
+```
+This command will create an `audio.mp3` file in the same directory on your host machine.
 
 ---
 
