@@ -10,6 +10,8 @@ package-mode = false
 python = "^3.10"
 typer = {extras = ["rich"], version = "^0.16.0"}
 ffmpeg-python = "^0.2.0"
+sounddevice = "^0.5.2"
+soundfile = "^0.13.1"
 
 [build-system]
 requires = ["poetry-core"]

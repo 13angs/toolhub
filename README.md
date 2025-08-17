@@ -4,10 +4,15 @@ A collection of useful command-line tools, built with Python and Typer.
 
 ---
 
-## **สรุปโครงสร้างโปรเจกต์:**
+## **Project strucure:**
 
 ```
 ├── tools/
+│   ├── recorder/
+│   │   ├── __init__.py
+│   │   ├── cli.py
+│   │   ├── main.py
+│   │   └── README.md
 │   └── vid2audio/
 │       ├── __init__.py
 │       ├── cli.py
@@ -62,3 +67,4 @@ poetry run python toolhub.py <TOOL_NAME> <COMMAND> [ARGUMENTS] [OPTIONS]
 Below is a list of the available tools. Click on a tool's name for detailed documentation and usage examples.
 
 - **[vid2audio](./tools/vid2audio/README.md):** A tool to extract audio from video files.
+- **[recorder](./tools/recorder/README.md):** A tool to record audio from your microphone.
