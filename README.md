@@ -92,18 +92,21 @@ docker build -f Dockerfile.alpine -t toolhub:alpine .
 Once the image is built, you can run any tool by passing commands to `docker run`. The key is to mount your current working directory into the container's `/app/data` directory to allow file access.
 
 **General Syntax:**
+
 ```bash
 # For Debian
 docker run --rm -v "$(pwd):/app/data" toolhub:debian <TOOL_NAME> [COMMANDS_AND_OPTIONS]
 
 # For Alpine
-docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]```
+docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]
+```
 
 **Example: Extracting audio using the `debian` image**
 
 Assume you have a file named `my_video.mp4` in your current directory.
+
 ```bash
-docker run --rm -v "$(pwd):/app/data" toolhub:debian vid2audio extract /app/data/my_video.mp4 /app/data/audio.mp3
+docker run --rm -v "$(pwd):/app/data" toolhub:debian vid2audio convert /app/data/my_video.mp4
 ```
 This command will create an `audio.mp3` file in the same directory on your host machine.
 
@@ -113,5 +116,5 @@ This command will create an `audio.mp3` file in the same directory on your host 
 
 Below is a list of the available tools. Click on a tool's name for detailed documentation and usage examples.
 
-- **[vid2audio](./tools/vid2audio/README.md):** A tool to extract audio from video files.
+- **[vid2audio](./tools/vid2audio/README.md):** A tool to convert audio from video files.
 - **[recorder](./tools/recorder/README.md):** A tool to record audio from your microphone.
