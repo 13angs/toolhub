@@ -13,7 +13,12 @@ A collection of useful command-line tools, built with Python and Typer.
 │   │   ├── cli.py
 │   │   ├── main.py
 │   │   └── README.md
-│   └── vid2audio/
+│   ├── vid2audio/
+│   │   ├── __init__.py
+│   │   ├── cli.py
+│   │   ├── main.py
+│   │   └── README.md
+│   └── yt-transcript/
 │       ├── __init__.py
 │       ├── cli.py
 │       ├── main.py
@@ -60,7 +65,7 @@ Before you begin, ensure you have the following software installed on your syste
 All commands follow this basic structure. To ensure you are using the correct Python environment, **always** prefix your commands with `poetry run`.
 
 ```bash
-poetry run python toolhub.py <TOOL_NAME> <COMMAND> [ARGUMENTS] [OPTIONS]
+poetry run python toolhub.py <TOOL_NAME> [ARGUMENTS] [OPTIONS]
 ```
 
 ---
@@ -118,3 +123,4 @@ Below is a list of the available tools. Click on a tool's name for detailed docu
 
 - **[vid2audio](./tools/vid2audio/README.md):** A tool to convert audio from video files.
 - **[recorder](./tools/recorder/README.md):** A tool to record audio from your microphone.
+- **[yt-transcript](./tools/yt-transcript/README.md):** Fetches the transcript from a YouTube video URL.
