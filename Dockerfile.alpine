@@ -1,5 +1,5 @@
-# Dockerfile for Alpine Linux distribution (python:3.11-alpine)
-# Optimized for the smallest possible image size.
+# Dockerfile for Alpine Linux
+# Results in a smaller image size, ideal for production.
 
 # --- STAGE 1: Build Stage ---
 FROM python:3.11-alpine AS builder
@@ -12,14 +12,13 @@ ENV POETRY_VERSION=1.8.2
 # Set the working directory
 WORKDIR /app
 
-# Install build-time system dependencies using apk
-RUN apk update && \
-    apk add --no-cache \
+# Install system dependencies for building
+# Removed audio-related packages (portaudio-dev, alsa-lib-dev) as they are no longer needed.
+# build-base is required for compiling some Python packages on Alpine.
+RUN apk add --no-cache \
     ffmpeg \
     curl \
-    build-base \
-    portaudio-dev \
-    alsa-lib-dev
+    build-base
 
 # Install Poetry
 RUN pip install "poetry==${POETRY_VERSION}"
@@ -31,6 +30,9 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry config virtualenvs.create false
 
 # Install project dependencies
+# --no-dev: Excludes development dependencies
+# --no-interaction: Prevents asking for user input
+# --no-ansi: Disables ANSI output for cleaner logs
 RUN poetry install --no-dev --no-interaction --no-ansi
 
 # Copy the application source code
@@ -48,11 +50,8 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install only the necessary runtime system dependencies
-# --- V V V THE FIX IS HERE V V V ---
-RUN apk add --no-cache \
-    ffmpeg \
-    portaudio \
-    alsa-lib
+# Removed audio-related runtime packages.
+RUN apk add --no-cache ffmpeg
 
 # Copy installed Python packages from the builder stage
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
@@ -60,8 +59,9 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 # Copy application code from the builder stage
 COPY --from=builder /app /app
 
-# Create a non-root user for security (Alpine-specific commands)
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Create a non-root user for security
+# -D: Create a system user without a password
+RUN adduser -D appuser
 USER appuser
 
 # Define the entrypoint

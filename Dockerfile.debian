@@ -13,13 +13,11 @@ ENV POETRY_VERSION=1.8.2
 WORKDIR /app
 
 # Install system dependencies
+# Removed audio-related packages (portaudio, libasound) as they are no longer needed.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ffmpeg \
     curl \
-    libportaudio2 \
-    portaudio19-dev \
-    libasound2-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -50,10 +48,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install only the necessary runtime system dependencies
+# Removed libportaudio2 as it's no longer required by any tool.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ffmpeg \
-    libportaudio2 \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
