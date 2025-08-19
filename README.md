@@ -8,11 +8,6 @@ A collection of useful command-line tools, built with Python and Typer.
 
 ```
 ├── tools/
-│   ├── recorder/
-│   │   ├── __init__.py
-│   │   ├── cli.py
-│   │   ├── main.py
-│   │   └── README.md
 │   ├── vid2audio/
 │   │   ├── __init__.py
 │   │   ├── cli.py
@@ -103,8 +98,7 @@ Once the image is built, you can run any tool by passing commands to `docker run
 docker run --rm -v "$(pwd):/app/data" toolhub:debian <TOOL_NAME> [COMMANDS_AND_OPTIONS]
 
 # For Alpine
-docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]
-```
+docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]```
 
 **Example: Extracting audio using the `debian` image**
 
@@ -122,5 +116,4 @@ This command will create an `audio.mp3` file in the same directory on your host 
 Below is a list of the available tools. Click on a tool's name for detailed documentation and usage examples.
 
 - **[vid2audio](./tools/vid2audio/README.md):** A tool to convert audio from video files.
-- **[recorder](./tools/recorder/README.md):** A tool to record audio from your microphone.
-- **[yt-transcript](./tools/yt-transcript/README.md):** Fetches the transcript from a YouTube video URL.
+- **[yt-transcript](./tools-yt-transcript/README.md):** Fetches the transcript from a YouTube video URL.
