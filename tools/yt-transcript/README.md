@@ -1,35 +1,55 @@
 # YouTube Transcript Tool (`yt-transcript`)
 
-This tool fetches and displays the full text transcript of a YouTube video given its URL.
+This tool fetches and displays the full text transcript of a YouTube video given its Video ID.
+
+---
 
 ## Description
 
 The `yt-transcript` command connects to YouTube's transcript service to retrieve the available captions for a video and formats them into a single, readable text block. This is useful for quickly getting the content of a video without having to watch it.
 
-## Usage
+## How to Use
 
-To use the tool, simply provide the full YouTube video URL as an argument.
+The command requires a `fetch` subcommand followed by the Video ID as an argument.
+
+### Basic Usage (Print to Console)
+
+To fetch a transcript and display it directly in your terminal, use the following command structure:
 
 ```bash
-poetry run python toolhub.py yt-transcript "YOUTUBE_VIDEO_URL"
+poetry run python toolhub.py yt-transcript fetch "VIDEO_ID"
 ```
 
-## Example
-
+**Example:**
 ```bash
 # Command
-poetry run python toolhub.py yt-transcript "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+poetry run python toolhub.py yt-transcript fetch "dQw4w9WgXcQ"
 
-# Expected Output (will be the full transcript of the video)
-# Never gonna give you up
-# Never gonna let you down
-# Never gonna run around and desert you
-# ...
+# Expected Output
+# Fetching transcript...
+# 
+# --- Transcript ---
+# We're no strangers to love You know the rules and so do I...
+# --- End Transcript ---
 ```
 
-## Error Handling
+### Saving to a File
 
-The tool will provide specific error messages if:
-- The URL is invalid.
-- Transcripts are disabled for the video.
-- No transcript can be found.
+You can save the transcript directly to a `.txt` file by using the `--output` (or `-o`) option.
+
+```bash
+poetry run python toolhub.py yt-transcript fetch "VIDEO_ID" --output [FILENAME].txt
+```
+
+**Example:**
+```bash
+poetry run python toolhub.py yt-transcript fetch "dQw4w9WgXcQ" -o rick_astley_lyrics.txt
+```
+This will create a file named `rick_astley_lyrics.txt` in your current directory containing the video's transcript.
+
+## Arguments and Options
+
+-   **`VIDEO_ID`** (Argument, Required): The unique identifier of the YouTube video (the part after `v=` in the URL).
+-   **`--output, -o`** (Option, Optional): The file path where the transcript should be saved. If this option is not provided, the transcript will be printed to the terminal.
+```
+---

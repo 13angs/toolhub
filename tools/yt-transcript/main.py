@@ -1,45 +1,31 @@
-# The "Engine" of the yt-transcript tool
-# Contains the core logic for fetching and formatting the transcript.
+# The engine for the yt-transcript tool
+from youtube_transcript_api import YouTubeTranscriptApi
 
-import re
-from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
+def get_transcript(video_id: str) -> str:
+    """
+    Fetches the transcript for a given YouTube video ID.
 
-def _extract_video_id(video_url: str) -> str | None:
-    """
-    Extracts the YouTube video ID from a given URL.
-    Supports standard, shortened, and embed URLs.
-    """
-    # Standard and shortened URLs (youtube.com/watch?v=... or youtu.be/...)
-    match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", video_url)
-    if match:
-        return match.group(1)
-    return None
-
-def get_transcript(video_url: str) -> str:
-    """
-    Fetches the transcript for a given YouTube video URL.
+    This function attempts to retrieve the transcript for the specified
+    video ID, joins all transcript text parts into a single string,
+    and returns it. It includes error handling for common issues like
+    missing transcripts or invalid video IDs.
 
     Args:
-        video_url: The full URL of the YouTube video.
+        video_id: The ID of the YouTube video.
 
     Returns:
-        A formatted string of the transcript or an error message.
+        A string containing the full transcript or an error message.
     """
-    video_id = _extract_video_id(video_url)
-    if not video_id:
-        return "Error: Could not extract a valid YouTube video ID from the URL."
-
     try:
-        # Fetch the transcript
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-
-        # Format the transcript into a single string
-        formatted_transcript = " ".join([item['text'] for item in transcript_list])
-        return formatted_transcript
-
-    except TranscriptsDisabled:
-        return f"Error: Transcripts are disabled for this video (ID: {video_id})."
-    except NoTranscriptFound:
-        return f"Error: No transcript could be found for this video (ID: {video_id})."
+        # The get_transcript method is a static method on the class.
+        # This is the correct way to call it.
+        ytt_api = YouTubeTranscriptApi()
+        transcript_list = ytt_api.fetch(video_id)
+        
+        # Join all the 'text' parts of the transcript segments
+        full_transcript = " ".join([item.text for item in transcript_list])
+        return full_transcript
     except Exception as e:
-        return f"An unexpected error occurred: {e}"
+        # Provide a more informative error message to the user
+        error_message = f"Could not retrieve transcript for video ID '{video_id}'. Reason: {e}"
+        return error_message
