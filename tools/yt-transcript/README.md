@@ -12,9 +12,9 @@ The `yt-transcript` command connects to YouTube's transcript service to retrieve
 
 The command requires a `fetch` subcommand followed by the Video ID as an argument.
 
-### Basic Usage (Print to Console)
+### Basic Usage
 
-To fetch a transcript and display it directly in your terminal, use the following command structure:
+To fetch a transcript and display it directly in your terminal, use the following command structure. By default, it will search for an English (`en`) transcript.
 
 ```bash
 poetry run python toolhub.py yt-transcript fetch "VIDEO_ID"
@@ -26,19 +26,33 @@ poetry run python toolhub.py yt-transcript fetch "VIDEO_ID"
 poetry run python toolhub.py yt-transcript fetch "dQw4w9WgXcQ"
 
 # Expected Output
-# Fetching transcript...
+# Fetching transcript for video ID 'dQw4w9WgXcQ' in languages ['en']...
 # 
 # --- Transcript ---
 # We're no strangers to love You know the rules and so do I...
 # --- End Transcript ---
 ```
 
-### Saving to a File
+### Specifying a Language
 
-You can save the transcript directly to a `.txt` file by using the `--output` (or `-o`) option.
+You can request a transcript in a specific language, or provide a prioritized list of languages, using the `--language` (or `-l`) option. The tool will try the languages in the order you provide them.
 
 ```bash
-poetry run python toolhub.py yt-transcript fetch "VIDEO_ID" --output [FILENAME].txt
+poetry run python toolhub.py yt-transcript fetch "VIDEO_ID" --language de --language en
+```
+
+**Example (Trying German first, then English):**
+```bash
+# This video has a German transcript
+poetry run python toolhub.py yt-transcript fetch "W8yG-a21f7w" -l de -l en
+```
+
+### Saving to a File
+
+You can save the transcript directly to a `.txt` file by using the `--output` (or `-o`) option. This works with all language options.
+
+```bash
+poetry run python toolhub.py yt-transcript fetch "VIDEO_ID" --language fr --output [FILENAME].txt
 ```
 
 **Example:**
@@ -50,6 +64,5 @@ This will create a file named `rick_astley_lyrics.txt` in your current directory
 ## Arguments and Options
 
 -   **`VIDEO_ID`** (Argument, Required): The unique identifier of the YouTube video (the part after `v=` in the URL).
+-   **`--language, -l`** (Option, Optional): A preferred language code (e.g., `en`, `de`, `fr`). You can provide this option multiple times to create a priority list (e.g., `-l de -l en`).
 -   **`--output, -o`** (Option, Optional): The file path where the transcript should be saved. If this option is not provided, the transcript will be printed to the terminal.
-```
----

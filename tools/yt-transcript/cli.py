@@ -4,20 +4,23 @@
 import typer
 from .main import get_transcript
 from typing_extensions import Annotated
+import rich
+from typing import List
 
 app = typer.Typer()
 
 @app.command(name="fetch", help="Fetches the transcript of a YouTube video from its URL.")
 def cli_get_transcript(
-    video_url: str = typer.Argument(..., help="The full URL of the YouTube video."),
-    output_file: Annotated[str, typer.Option("--output", "-o", help="Path to save the transcript as a .txt file. If not provided, prints to console.")] = None
+    video_id: str = typer.Argument(..., help="The Video ID of the YouTube video."),
+    output_file: Annotated[str, typer.Option("--output", "-o", help="Path to save the transcript as a .txt file. If not provided, prints to console.")] = None,
+    languages: Annotated[List[str], typer.Option("--language", "-l", help="Language code(s) to try (e.g., en, de). Can be used multiple times. Defaults to 'en'.")] = None
 ):
     """
     A command-line tool to fetch and display the transcript of a YouTube video.
     """
     try:
-        typer.echo("Fetching transcript...")
-        transcript_text = get_transcript(video_url)
+        rich.print(f"[yellow]Fetching transcript for video ID '{video_id}' in languages {languages}...[/yellow]")
+        transcript_text = get_transcript(video_id, languages)
         
         if not transcript_text:
             typer.secho("Could not retrieve transcript. The video might have transcripts disabled.", fg=typer.colors.YELLOW)
