@@ -1,5 +1,7 @@
 # ToolHub CLI
 
+[![Docker](https://github.com/13angs/toolhub/actions/workflows/docker.yml/badge.svg)](https://github.com/13angs/toolhub/actions/workflows/docker.yml)
+
 A collection of useful command-line tools, built with Python and Typer.
 
 ---
