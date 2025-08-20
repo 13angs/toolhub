@@ -13,6 +13,11 @@ A collection of useful command-line tools, built with Python and Typer.
 │   │   ├── cli.py
 │   │   ├── main.py
 │   │   └── README.md
+│   ├── yt-download/
+│   │   ├── __init__.py
+│   │   ├── cli.py
+│   │   ├── main.py
+│   │   └── README.md
 │   └── yt-transcript/
 │       ├── __init__.py
 │       ├── cli.py
@@ -38,9 +43,22 @@ Before you begin, ensure you have the following software installed on your syste
 
 - **Python 3.10 or newer**
 - **Poetry** for dependency management.
-- **FFmpeg** for video/audio processing.
+- **FFmpeg** for video/audio processing. This is crucial for tools like `vid2audio` and `yt-download`.
 
-*(For detailed installation steps for these prerequisites, please see the original `README.md` content in the previous conversation.)*
+**Installing FFmpeg:**
+
+-   **On macOS (using Homebrew):**
+    ```bash
+    brew install ffmpeg
+    ```
+-   **On Debian/Ubuntu:**
+    ```bash
+    sudo apt update && sudo apt install ffmpeg
+    ```
+-   **On Windows (using Chocolatey):**
+    ```bash
+    choco install ffmpeg
+    ```
 
 ### 2. Project Installation
 
@@ -68,6 +86,8 @@ poetry run python toolhub.py <TOOL_NAME> [ARGUMENTS] [OPTIONS]
 ## 🐳 Docker Usage
 
 This project can be built into a Docker image for easy and consistent execution across different environments. We provide Dockerfiles for two popular Linux distributions.
+
+**Note:** The provided Dockerfiles already include `ffmpeg`, so no extra installation is needed if you use Docker.
 
 ### Choosing an Image
 -   **Debian (`Dockerfile.debian`):** Recommended for general use. It offers great compatibility with a wide range of software.
@@ -98,16 +118,15 @@ Once the image is built, you can run any tool by passing commands to `docker run
 docker run --rm -v "$(pwd):/app/data" toolhub:debian <TOOL_NAME> [COMMANDS_AND_OPTIONS]
 
 # For Alpine
-docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]```
+docker run --rm -v "$(pwd):/app/data" toolhub:alpine <TOOL_NAME> [COMMANDS_AND_OPTIONS]
+```
 
-**Example: Extracting audio using the `debian` image**
-
-Assume you have a file named `my_video.mp4` in your current directory.
+**Example: Downloading a YouTube video as audio using the `debian` image**
 
 ```bash
-docker run --rm -v "$(pwd):/app/data" toolhub:debian vid2audio convert /app/data/my_video.mp4
+docker run --rm -v "$(pwd):/app/data" toolhub:debian yt-download save "YOUTUBE_URL_HERE" --audio -o /app/data
 ```
-This command will create an `audio.mp3` file in the same directory on your host machine.
+This command will create an MP3 file in your current directory on your host machine.
 
 ---
 
@@ -116,4 +135,5 @@ This command will create an `audio.mp3` file in the same directory on your host 
 Below is a list of the available tools. Click on a tool's name for detailed documentation and usage examples.
 
 - **[vid2audio](./tools/vid2audio/README.md):** A tool to convert audio from video files.
-- **[yt-transcript](./tools-yt-transcript/README.md):** Fetches the transcript from a YouTube video URL.
+- **[yt-download](./tools/yt-download/README.md):** Downloads a video (MP4) or audio (MP3) from a YouTube URL.
+- **[yt-transcript](./tools/yt-transcript/README.md):** Fetches the transcript from a YouTube video URL.
